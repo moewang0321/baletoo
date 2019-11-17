@@ -1,0 +1,91 @@
+.title {
+    font-size: .26rem;
+    font-weight: 700;
+    margin-top: .22rem;
+}
+
+.fl {
+    float: left
+}
+
+.fr {
+    float: right
+}
+
+.wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+
+}
+
+.wrapper>img {
+    width: 100%;
+    height: 2.1rem;
+}
+
+.des {
+    font-size: .24rem;
+    text-overflow: ellipsis;
+    margin-top: .12rem;
+    margin-bottom: .32rem;
+}
+
+.vux-spinner-ios,
+.vux-spinner-ios-small {
+    stroke: #69717d;
+}
+
+.vux-spinner,
+.vux-spinner svg {
+    width: 28px;
+    height: 28px;
+}
+
+.vux-spinner {
+    stroke: #444;
+    fill: #444;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.clearfix {
+    zoom: 1;
+}
+
+.topBack {
+    position: fixed;
+    z-index: 999;
+    width: 0.9rem;
+    height: 0.9rem;
+    background-image: url('./assets/img/topbar.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    font-size: 0.2rem;
+    color: #fff;
+    bottom: 1.28rem;
+    right: 0.3rem;
+    display: none;
+    animation: 0.7s opacity2 0s;
+
+}
+
+.topBack p {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50%;
+    text-align: center;
+}
+
+@keyframes opacity2 {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
