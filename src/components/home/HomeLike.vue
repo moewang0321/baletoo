@@ -217,8 +217,5 @@ export default {
   }
 }
 
-.loading {
-  text-align: center;
-  padding: 0.4rem 0 1.2rem;
-}
+
 </style>

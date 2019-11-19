@@ -11,6 +11,8 @@ export default new Vuex.Store({
     cityOption: '',
     homeLikePage: 1,
     homePageIsAdd: false,
+    findListPage: 1,
+    findListPageIsAdd: false,
     currentCity: '北京'
   },
   mutations,

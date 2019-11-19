@@ -1,3 +1,6 @@
+const path = require('path');
+const SkeletonWebpackPlugin = require('vue-skeleton-webpack-plugin');
+
 module.exports = {
     devServer: {
         proxy: {
@@ -9,5 +12,7 @@ module.exports = {
                 },
             }
         }
-    }
+    },
+
+
 }

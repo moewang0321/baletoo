@@ -41,18 +41,21 @@
       </div>
 
       <div class="options-wrapper">
-        <div class="tab-weizhi" style="display:none" isOpen="0">
+        <div class="tab-op tab-weizhi options-weizhi-left" style="display:none" isOpen="0">
           <div class="weizhi-box">
-            <div class="weizhi-quyu">
+            <div class="weizhi-quyu" tab="quyu" @click="weizhiSelectChild($event , 'quyu')">
               <span class="weizhi-tab-selected">区域</span>
             </div>
-            <div class="weizhi-ditie">
+            <div class="weizhi-ditie" tab="ditie" @click="weizhiSelectChild($event , 'ditie')">
               <span class>地铁</span>
             </div>
           </div>
-          <div class="weizhi-options">
+          <div class="weizhi-options" tag="options-quyu">
             <ul class="options-weizhi">
-              <li class="options-weizhi-item weizhi-item-left weizhi-item-left-active">全部</li>
+              <li
+                class="options-weizhi-item weizhi-item-left weizhi-item-left-active"
+                @click="selectAll($event )"
+              >全部</li>
               <li
                 class="options-weizhi-item weizhi-item-left"
                 v-for="(area , index) in arealist"
@@ -66,23 +69,29 @@
               <li
                 class="options-weizhi-item weizhi-item-right right-active"
                 v-if="tArealist.length"
+                en="all"
+                @click="chooseItem($event)"
               >全部</li>
               <li
                 class="options-weizhi-item weizhi-item-right"
                 v-for="(tArea , index ) in tArealist"
                 :key="index"
                 :en="tArea.pinyin"
+                @click="chooseItem($event)"
               >{{tArea.name}}</li>
             </ul>
           </div>
-          <div class="weizhi-options" style="display:none">
+          <div class="weizhi-options" tag="options-ditie" style="display:none">
             <ul class="options-weizhi">
-              <li class="options-weizhi-item weizhi-item-left weizhi-item-left-active">全部</li>
+              <li
+                class="options-weizhi-item weizhi-item-left weizhi-item-left-active"
+                @click="selectAll($event )"
+              >全部</li>
               <li
                 class="options-weizhi-item weizhi-item-left"
                 v-for="(line , index) in linelist"
                 :key="index"
-                :id="line.id"
+                :dId="'d' + line.id"
                 :index="index"
                 @click="selectLine($event)"
               >{{line.name}}</li>
@@ -91,26 +100,31 @@
               <li
                 class="options-weizhi-item weizhi-item-right right-active"
                 v-if="tLinelist.length"
+                dId="all"
+                @click="chooseItem($event)"
               >全部</li>
 
               <li
                 class="options-weizhi-item weizhi-item-right"
                 v-for="(tLine , index ) in tLinelist"
                 :key="index"
-                :id="tLine.id"
+                :dId="'d' + tLine.id"
                 :index="index"
+                @click="chooseItem($event)"
               >{{tLine.name}}</li>
             </ul>
           </div>
         </div>
-        <div class="tab-zujin" style="display:none" isOpen="0">
+        <div class="tab-op tab-zujin" style="display:none" isOpen="0">
           <ul class="zujin-options">
-            <li class="zujin-option zujin-option-active">不限</li>
+            <li class="zujin-option zujin-option-active" mId="all" @click="chooseItem($event)">不限</li>
             <li
               class="zujin-option"
               v-for="(moneyItem , index) in zujinlist"
               :key="index"
               :index="index"
+              :mId="'m' + moneyItem.id"
+              @click="chooseItem($event)"
             >{{moneyItem.name}}</li>
           </ul>
           <div class="zujin-price clearfix">
@@ -137,15 +151,18 @@
             <li class="ruler-item">不限</li>
           </ul>
         </div>
-        <div class="tab-huxing" style="display:none" isOpen="0">
+        <div class="tab-op tab-huxing" style="display:none" isOpen="0">
           <div class="huxing-options">
             <ul class="options-weizhi">
-              <li class="options-weizhi-item weizhi-item-left weizhi-item-left-active">不限</li>
+              <li
+                class="options-weizhi-item weizhi-item-left weizhi-item-left-active"
+                @click="selectAll($event )"
+              >不限</li>
               <li
                 class="options-weizhi-item weizhi-item-left"
                 v-for="(huxing , index) in huxinlist"
                 :key="index"
-                :id="huxing.id"
+                :cId="'c' + huxing.id"
                 :index="index"
                 @click="selectHuxing($event)"
               >{{huxing.name}}</li>
@@ -154,17 +171,20 @@
               <li
                 class="options-weizhi-item weizhi-item-right right-active"
                 v-if="tHuXinglist.length"
+                hId="all"
+                @click="chooseItem($event)"
               >不限</li>
               <li
                 class="options-weizhi-item weizhi-item-right"
                 v-for="(hu , index) in tHuXinglist"
                 :key="index"
-                :id="hu.id"
+                :hId="'h' + hu.id"
+                @click="chooseItem($event)"
               >{{hu.name}}</li>
             </ul>
           </div>
         </div>
-        <div class="tab-gengduo" style="display:none" isOpen="0">
+        <div class=" tab-op tab-gengduo" style="display:none" isOpen="0">
           <div class="gengduo-options gengduo-options-new">
             <div class="title-new">特色</div>
             <div class="content-new">
@@ -173,7 +193,7 @@
                   v-for="(item , index) in specialTSList"
                   :key="index"
                   :index="index"
-                  :id="item.id"
+                  :tId="'t' + item.id"
                 >{{item.name}}</li>
               </ul>
             </div>
@@ -184,7 +204,7 @@
                   v-for="(item , index) in specialBZList"
                   :key="index"
                   :index="index"
-                  :id="item.id"
+                  :tId="'t' + item.id"
                 >{{item.name}}</li>
               </ul>
             </div>
@@ -223,7 +243,9 @@
       </div>
     </div>
 
-    <FindHouseList></FindHouseList>
+    <div class="findHouse-container">
+      <FindHouseList :page="page" :filterStr="filterInUrl ? filterInUrl + '/' : ''" :area="area ? area + '/' : ''"></FindHouseList>
+    </div>
   </div>
 </template>
 
@@ -233,11 +255,18 @@ import CityOption from "@/components/CityOption";
 import FindHouseList from "@/components/find/FindHouseList";
 import { mapState, mapActions } from "vuex";
 import { get } from "@/utils/http.js";
+import BScroll from "better-scroll";
 
 let city = localStorage.getItem("city") || "北京";
 let cityEn = globalCityList[city].cityEn;
 
 export default {
+  props: {
+    page: {
+      type: Number
+    }
+  },
+
   data() {
     return {
       filterInUrl: "",
@@ -253,7 +282,15 @@ export default {
       speciallist: [],
       specialTSList: [],
       specialBZList: [],
-      zujinlist: []
+      zujinlist: [],
+
+      area: "",
+      ditie: "",
+      zujin: "",
+      huxingC: this.filterInUrl || "",
+      huxingh: "",
+      gengduo: "",
+      filterSum: ""
     };
   },
 
@@ -263,13 +300,119 @@ export default {
   },
 
   computed: {
-    ...mapState(["cityOption", "currentCity"])
+    ...mapState(["cityOption", "currentCity"]),
+    ...mapState(["findListPage", "findListPageIsAdd"])
   },
 
   methods: {
     ...mapActions(["cityShow"]),
+    ...mapActions([
+      "findListPageUpdate",
+      "openFindPageAdd",
+      "resetFindPageAdd"
+    ]),
+
+    //页数增加，参数传给HomeLike用以请求新数据
+    findPageAdd() {
+      this.findListPageUpdate(this.findListPage);
+    },
     onCityOptionShow() {
       this.cityShow("showSelect");
+    },
+    selectAll(e) {
+      $(e.currentTarget)
+        .addClass(" weizhi-item-left-active")
+        .siblings()
+        .removeClass(" weizhi-item-left-active");
+      this.tArealist = this.tHuXinglist = this.tLinelist = [];
+    },
+    chooseItem(e) {
+      let $el = $(e.currentTarget);
+      let area = $el.attr("en");
+      let dId = $el.attr("dId");
+      let mId = $el.attr("mId");
+      let hId = $el.attr("hId");
+      //区域
+      if (area) {
+        if (area === "all") {
+          this.area = $(".weizhi-item-left-active").attr("en");
+          let fArea = $(".weizhi-item-left-active").html();
+          $('.tab[tab="weizhi"]').addClass("tab-text-active")
+            .children(".tab-text").html(fArea)
+            ;
+        } else {
+          this.area = $el.attr("en");
+          let areaText = $el.html()
+          $('.tab[tab="weizhi"]').addClass("tab-text-active")
+            .children(".tab-text")
+            .html(areaText);
+        }
+      }
+      //地铁
+      if (dId) {
+        if (dId === "all") {
+          this.ditie = $el
+            .parent("ul")
+            .siblings("ul")
+            .children(".weizhi-item-left-active")
+            .attr("dId");
+          let fditie = $(".weizhi-item-left-active").html();
+          $('.tab[tab="weizhi"]').addClass("tab-text-active")
+            .children(".tab-text").html(fditie)
+            ;
+        } else {
+          this.ditie = dId;
+          let ditieText = $el.html()
+          $('.tab[tab="weizhi"]').addClass("tab-text-active")
+            .children(".tab-text")
+            .html(ditieText);
+        }
+      }
+      //租金
+      if (mId) {
+        if (mId === "all") {
+          this.zujin = $el
+            .siblings()
+            .eq(0)
+            .attr("mId");
+          $('.tab[tab="weizhi"]')
+            .children(".tab-text").html("")
+            ;
+        } else {
+          this.zujin = mId;
+        }
+      }
+      //户型（c、h）
+      if (hId) {
+        this.huxingC = $el
+          .parent("ul")
+          .siblings("ul")
+          .children(".weizhi-item-left-active")
+          .attr("cId");
+        if (hId === "all") {
+          this.huxing = "";
+        } else {
+          this.huxingh = hId;
+        }
+      }
+      //url请求时候的params
+      this.filterSum =
+        this.ditie + this.zujin + this.huxingC + this.huxingh + this.gengduo;
+
+      $(".tab-out").css({
+          "z-index": "",
+          top: ".88rem"
+        });
+        $('.tab-op').attr("isOpen", 0);
+        $('#mask').css('display' , 'none');
+        $('.tab-op').css("display", "none");
+        $(`.tab`).removeClass(
+          "tab-active"
+      );
+      console.log(this.filterSum)
+      
+      this.$router.push({ path: "/zhaofang/" + this.filterSum });
+      this.filterInUrl = this.filterSum;
     },
     selectArea(e) {
       let en = e.currentTarget.getAttribute("en");
@@ -306,11 +449,18 @@ export default {
     showOptionTab(e) {
       let tab = ".tab-" + e.currentTarget.getAttribute("tab");
       let $option = $(tab);
-      let onOff = $option.attr("isOpen");
-      console.log(onOff);
+      // let onOff = $option.attr("isOpen");
 
-      if (onOff == 0) {
+      if ($option.attr("isOpen") == 0) {
+        $option.siblings().attr("isOpen", 0);
+        $(".tab-out").css({
+          "z-index": 1009,
+          top: "0"
+        });
+
         $option.attr("isOpen", 1);
+        console.log($option.siblings().attr("isOpen"), $option.attr("isOpen"));
+        this.$parent.$refs.mask.style.display = "block";
         $(`.tab[tab=${e.currentTarget.getAttribute("tab")}]`)
           .addClass("tab-active")
           .siblings()
@@ -322,16 +472,97 @@ export default {
           .siblings()
           .css("display", "none");
       } else {
-        $option.css("display", "none");
+        $(".tab-out").css({
+          "z-index": "",
+          top: ".88rem"
+        });
         $option.attr("isOpen", 0);
+        $option.siblings().attr("isOpen", 0);
+        this.$parent.$refs.mask.style.display = "none";
+        $option.css("display", "none");
+        $(`.tab[tab=${e.currentTarget.getAttribute("tab")}]`).removeClass(
+          "tab-active"
+        );
+        console.log($option.siblings().attr("isOpen"), $option.attr("isOpen"));
       }
+    },
+    weizhiSelectChild(e, nm) {
+      $(`.weizhi-options`)
+        .eq(0)
+        .children(".options-weizhi")
+        .children("li")
+        .eq(0)
+        .addClass("weizhi-item-left-active")
+        .siblings()
+        .removeClass("weizhi-item-left-active");
+      $(`.weizhi-options`)
+        .eq(1)
+        .children(".options-weizhi")
+        .children("li")
+        .eq(0)
+        .addClass("weizhi-item-left-active")
+        .siblings()
+        .removeClass("weizhi-item-left-active");
+      (this.tArealist = []),
+        (this.tLinelist = []),
+        $(`.weizhi-options`)
+          .children(".options-weizhi-left")
+          .children("li")
+          .eq(0)
+          .addClass("weizhi-item-left-active")
+          .siblings()
+          .removeClass("weizhi-item-left-active");
+      $(e.currentTarget)
+        .children()
+        .addClass("weizhi-tab-selected");
+      $(e.currentTarget)
+        .siblings()
+        .children()
+        .removeClass("weizhi-tab-selected");
+      $(`.weizhi-options[tag=options-${nm}]`)
+        .css("display", "flex")
+        .siblings(".weizhi-options")
+        .css("display", "none");
+    }
+  },
+
+  watch: {
+    $route(to, from) {
+      this.$router.go(0);
     }
   },
 
   async mounted() {
-    this.filterInUrl = this.$parent.filterP;
-    console.log(this.filterInUrl);
+    this.$parent.$refs.mask.style.display = "none";
+    this.bScroll = new BScroll(".findHouse-container", {
+      click: true,
+      bounce: false,
+      probeType: 2
+    });
+    this.bScroll.on("scrollEnd", async () => {
+      let { y, maxScrollY } = this.bScroll;
 
+      if (y <= maxScrollY && this.findListPageIsAdd) {
+        this.findPageAdd();
+
+        await this.$nextTick();
+        this.bScroll.refresh();
+      }
+    });
+
+    this.filterInUrl = this.$parent.filterP;
+    if (this.filterInUrl === "c1" || this.filterInUrl === "c2") {
+      $(".tab[tab=huxing]").addClass("tab-text-active");
+      if (this.filterInUrl === "c1") {
+        $(".tab[tab=huxing]")
+          .children(".tab-text")
+          .html("合租");
+      } else {
+        $(".tab[tab=huxing]")
+          .children(".tab-text")
+          .html("整租");
+      }
+    }
     let result = await get({
       url: "/api/" + cityEn + "/Menuapi/index"
     });
@@ -377,6 +608,10 @@ export default {
   },
 
   watch: {
+    async $route(to, from) {
+      // 当前路由
+      console.log(this.filterSum, this.filterInUrl);
+    },
     async currentCity(val) {
       let a = globalCityList[val].cityEn;
       let result = await get({
@@ -408,7 +643,10 @@ export default {
 
 <style lang="stylus" scoped>
 .find-house {
-  min-height: 110vh;
+  -min-height: 110vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .search-header {
@@ -501,7 +739,8 @@ export default {
 .tab-out {
   width: 100%;
   background-color: #fff;
-  z-index: 102;
+  position: absolute;
+  top: 0.88rem;
 }
 
 .tab-wrapper {
@@ -888,12 +1127,12 @@ li.right-active {
 }
 
 .shortcut-filter {
-  -webkit-box-sizing: border-box;
   padding-left: 0.3rem;
   width: 100%;
   overflow: hidden;
   box-sizing: border-box;
   padding-bottom: 0.3rem;
+  padding-top: 0.9rem;
   border-bottom: 1px solid #ececec;
 
   .shortcut-wrapper {
@@ -928,5 +1167,11 @@ li.right-active {
       }
     }
   }
+}
+
+.findHouse-container {
+  flex: 1;
+  height: 1px;
+  overflow: hidden;
 }
 </style>

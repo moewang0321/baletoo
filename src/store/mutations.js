@@ -9,6 +9,11 @@ export default {
         state.homeLikePage = page
 
     },
+    //FIND>page更新
+    setfindListPage(state, page) {
+        state.findListPage = page
+
+    },
 
     //判断首页猜你喜欢数据是否请求完毕
     setPageAddState(state) {
@@ -17,6 +22,13 @@ export default {
     //每次请求完重置状态
     resetPageAddState(state) {
         state.homePageIsAdd = false
+    },
+    setFindPageAddState(state) {
+        state.findListPageIsAdd = true
+    },
+    //每次请求完重置状态
+    resetFindPageAddState(state) {
+        state.findListPageIsAdd = false
     },
 
     //选择当前城市

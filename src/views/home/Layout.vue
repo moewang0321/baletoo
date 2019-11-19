@@ -39,7 +39,7 @@ export default {
       return globalCityList[cityName].cityEn;
     },
     backTop() {
-      this.aaa();
+      this.backToTop();
     },
 
     showTopBar(attr) {
@@ -51,21 +51,14 @@ export default {
     let el = this.$refs.home.$refs.searchIpt;
     let cityEn = this.getCurrentCity(this.currentCity);
     localStorage.setItem("city", this.currentCity);
-    let bScroll = new BScroll(".home-container", {
+    this.bScroll = new BScroll(".home-container", {
       click: true,
       bounce: false,
       probeType: 2
     });
 
-    bScroll.on("scroll", async () => {
-      let { y, maxScrollY } = bScroll;
-
-      if (y <= maxScrollY && this.homePageIsAdd) {
-        this.likePageAdd();
-
-        await this.$nextTick();
-        bScroll.refresh();
-      }
+    this.bScroll.on("scroll", async () => {
+      let { y, maxScrollY } = this.bScroll;
 
       if (Math.abs(y) >= el.offsetTop + el.offsetHeight) {
         this.showTopBar("display:block");
@@ -75,8 +68,19 @@ export default {
       }
     });
 
-    this.aaa = function() {
-      bScroll.scrollTo(0, 0, 500);
+    this.bScroll.on("scrollEnd", async () => {
+      let { y, maxScrollY } = this.bScroll;
+
+      if (y <= maxScrollY && this.homePageIsAdd) {
+        this.likePageAdd();
+
+        await this.$nextTick();
+        this.bScroll.refresh();
+      }
+    });
+
+    this.backToTop = function() {
+      this.bScroll.scrollTo(0, 0, 500);
     };
   }
 };

@@ -1,16 +1,20 @@
 <template>
   <div class="find-container">
-    <findSkeleton></findSkeleton>
+    <findSkeleton :page="findListPage"></findSkeleton>
+
+    <div id="mask" style="display:none" ref="mask"></div>
   </div>
 </template>
 
 <script>
+import $ from "jquery";
 import FindSkeleton from "@/views/zhaofang/FindSkeleton";
+import { mapState, mapActions } from "vuex";
+
 export default {
   beforeMount() {
-    console.log(this.$route.params.id)
+    console.log(this.$route.params.id);
     this.filterP = this.$route.params.id;
-    
   },
 
   components: {
@@ -21,13 +25,33 @@ export default {
     return {
       filterChild: this.filterP
     };
+  },
+  computed: {
+    ...mapState(["findListPage", "findListPageIsAdd", "currentCity"])
+  },
+  methods: {
+    ...mapActions([
+      "findListPageUpdate",
+      "openFindPageAdd",
+      "resetFindPageAdd"
+    ]),
+
+    //页数增加，参数传给HomeLike用以请求新数据
+    findPageAdd() {
+      this.findListPageUpdate(this.findListPage);
+    }
+  },
+  mounted() {
+    $('#mask').on('click' , function () {
+      
+    })
   }
 };
 </script>
 
 <style>
 .find-container {
-  overflow: scroll;
+  overflow: hidden;
   height: 100%;
 }
 </style>

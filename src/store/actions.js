@@ -15,6 +15,15 @@ export default {
         commit('setHomeLikePageUpdate', page)
 
     },
+    findListPageUpdate({
+        commit,
+
+        state
+    }, page) {
+        page++
+        commit('setfindListPage', page)
+
+    },
 
     openPageAdd({
         commit
@@ -26,6 +35,17 @@ export default {
         commit
     }) {
         commit('resetPageAddState')
+    },
+    openFindPageAdd({
+        commit
+    }) {
+        commit('setFindPageAddState')
+    },
+
+    resetFindPageAdd({
+        commit
+    }) {
+        commit('resetFindPageAddState')
     },
 
     changeCity({

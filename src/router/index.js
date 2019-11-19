@@ -3,6 +3,10 @@ import VueRouter from 'vue-router'
 import Index from '@/views/home/Layout.vue'
 import Find from '@/views/zhaofang/Layout.vue'
 
+const routerPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return routerPush.call(this, location).catch(error => error)
+}
 Vue.use(VueRouter)
 
 const routes = [{
@@ -12,6 +16,11 @@ const routes = [{
   },
   {
     path: '/zhaofang/:id',
+    name: 'find',
+    component: Find
+  },
+  {
+    path: '/zhaofang',
     name: 'find',
     component: Find
   },

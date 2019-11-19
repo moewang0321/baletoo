@@ -12,8 +12,8 @@
       </div>
       <div class="detail">
         <p class="title">
-          <!---->
-          <span>{{house.title_name | fiTitle(0)}}</span>
+          <span>{{house.is_charter==1 ? "[转租]&nbsp;" : ""}}</span>
+          <span>{{house.hire_way==2 ? "合租&nbsp;" : "整租&nbsp;"}}</span>
           <!---->
           <!---->
           <span>{{house.subdistrict_name}}</span>
@@ -32,7 +32,7 @@
       </div>
     </div>
     <div class="extra-info">
-      <div class="landlord-info" >
+      <div class="landlord-info" v-if="house.lanName">
         <div class="owner" v-if="house.lanName">
           <div class="logo">
             <img :src="house.lanPortrait" v-if="house.lanPortrait" />
@@ -51,7 +51,15 @@
         <div class="one_commont" v-if="house.lanLable && house.lanName">{{house.lanLable}}</div>
         <em v-if="house.lanLable && house.lanName">”</em>
       </div>
-      <!---->
+
+      <div class="agency-info" v-if="house.short_name">
+        <div class="header">
+          <div class="name">{{house.short_name}}</div>
+          <div class="icon pinpai"></div>
+        </div>
+        <div class="btn">进店</div>
+      </div>
+
       <div class="price-info">
         <div class="price">
           <span class="number">¥{{house.month_rent}}</span>/月
@@ -160,10 +168,6 @@ export default {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-
-        span {
-          margin-right: 0.1rem;
-        }
       }
 
       .room-info {
@@ -323,6 +327,50 @@ export default {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+      }
+    }
+
+    .agency-info {
+      .header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.2rem;
+
+        .name {
+          font-size: 0.24rem;
+          color: #1c1c1c;
+          margin-right: 0.12rem;
+          max-width: 1.54rem;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .pinpai {
+          background-image: url('../assets/img/brand.png');
+        }
+      }
+
+      .btn {
+        width: 1rem;
+        height: 0.4rem;
+        border: 1px solid #d9d9d9;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        border-radius: 0.2rem;
+        line-height: 0.4rem;
+        text-align: center;
+        color: #646464;
+        font-size: 0.24rem;
+        margin: 0 auto;
+      }
+
+      .icon {
+        width: 0.44rem;
+        height: 0.22rem;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        background-position: 50%;
       }
     }
 
