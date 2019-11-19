@@ -42,9 +42,7 @@ export default {
     }
   },
   mounted() {
-    $('#mask').on('click' , function () {
-      
-    })
+    $("#mask").on("click", function() {});
   }
 };
 </script>

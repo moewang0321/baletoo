@@ -62,10 +62,11 @@
 
       <div class="price-info">
         <div class="price">
+          <span v-if="house.only_one_price" class="icon quanwangdijia"></span>
           <span class="number">¥{{house.month_rent}}</span>/月
         </div>
         <!---->
-        <!---->
+        <div v-if="house.only_one_price" class="quanwangdijia-text">全网底价，贵就赔</div>
         <!---->
         <div class="shuidianmeiwang-text">
           <span v-if="house.is_open_fee">水电煤网费涨就赔</span>
@@ -386,6 +387,17 @@ export default {
       -ms-flex-align: end;
       align-items: flex-end;
 
+      .quanwangdijia-text {
+        color: #f75c21;
+        font-size: 0.28rem;
+        font-weight: 700;
+        margin-top: 0.1rem;
+        max-width: 4rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
       .price {
         display: -webkit-box;
         display: -ms-flexbox;
@@ -399,6 +411,19 @@ export default {
         .number {
           font-size: 0.32rem;
           font-weight: 700;
+        }
+
+        .quanwangdijia {
+          width: 1.12rem;
+          height: 0.5rem;
+          background-image: url('//js.baletoo.cn/static/m/static/img/quanwangdijia.3a60ff6.png'); 
+        }
+
+        .icon {
+          display: inline-block;
+          background-size: 100% 100%;
+          background-position: 50%;
+          background-repeat: no-repeat;
         }
       }
 

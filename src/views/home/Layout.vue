@@ -64,7 +64,7 @@ export default {
         this.showTopBar("display:block");
       }
       if (Math.abs(y) < el.offsetTop + el.offsetHeight) {
-        this.showTopBar("");
+        this.showTopBar("display:none");
       }
     });
 

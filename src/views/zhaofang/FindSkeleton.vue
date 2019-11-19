@@ -184,7 +184,7 @@
             </ul>
           </div>
         </div>
-        <div class=" tab-op tab-gengduo" style="display:none" isOpen="0">
+        <div class="tab-op tab-gengduo" style="display:none" isOpen="0">
           <div class="gengduo-options gengduo-options-new">
             <div class="title-new">特色</div>
             <div class="content-new">
@@ -244,7 +244,18 @@
     </div>
 
     <div class="findHouse-container">
-      <FindHouseList :page="page" :filterStr="filterInUrl ? filterInUrl + '/' : ''" :area="area ? area + '/' : ''"></FindHouseList>
+      <FindHouseList
+        :page="page"
+        :filterStr="filterInUrl ? filterInUrl + '/' : ''"
+        :area="area ? area + '/' : ''"
+      ></FindHouseList>
+    </div>
+
+    <div class="sort">
+      <p>排序</p>
+    </div>
+    <div class="topBack" ref="topBar" :style="showBar" @click="backTop">
+      <p>回到顶部</p>
     </div>
   </div>
 </template>
@@ -269,6 +280,7 @@ export default {
 
   data() {
     return {
+      showBar: "display:none",
       filterInUrl: "",
       houseList: [],
       arealist: [],
@@ -287,7 +299,12 @@ export default {
       area: "",
       ditie: "",
       zujin: "",
-      huxingC: this.filterInUrl || "",
+      huxingC:
+        this.$parent.filterP === "c1"
+          ? "c1"
+          : this.$parent.filterP === "c2"
+          ? "c2"
+          : "",
       huxingh: "",
       gengduo: "",
       filterSum: ""
@@ -327,6 +344,8 @@ export default {
       this.tArealist = this.tHuXinglist = this.tLinelist = [];
     },
     chooseItem(e) {
+      //分析url中的筛选
+
       let $el = $(e.currentTarget);
       let area = $el.attr("en");
       let dId = $el.attr("dId");
@@ -337,13 +356,15 @@ export default {
         if (area === "all") {
           this.area = $(".weizhi-item-left-active").attr("en");
           let fArea = $(".weizhi-item-left-active").html();
-          $('.tab[tab="weizhi"]').addClass("tab-text-active")
-            .children(".tab-text").html(fArea)
-            ;
+          $('.tab[tab="weizhi"]')
+            .addClass("tab-text-active")
+            .children(".tab-text")
+            .html(fArea);
         } else {
           this.area = $el.attr("en");
-          let areaText = $el.html()
-          $('.tab[tab="weizhi"]').addClass("tab-text-active")
+          let areaText = $el.html();
+          $('.tab[tab="weizhi"]')
+            .addClass("tab-text-active")
             .children(".tab-text")
             .html(areaText);
         }
@@ -357,29 +378,37 @@ export default {
             .children(".weizhi-item-left-active")
             .attr("dId");
           let fditie = $(".weizhi-item-left-active").html();
-          $('.tab[tab="weizhi"]').addClass("tab-text-active")
-            .children(".tab-text").html(fditie)
-            ;
+          $('.tab[tab="weizhi"]')
+            .addClass("tab-text-active")
+            .children(".tab-text")
+            .html(fditie);
         } else {
           this.ditie = dId;
-          let ditieText = $el.html()
-          $('.tab[tab="weizhi"]').addClass("tab-text-active")
+          let ditieText = $el.html();
+          $('.tab[tab="weizhi"]')
+            .addClass("tab-text-active")
             .children(".tab-text")
             .html(ditieText);
         }
       }
       //租金
       if (mId) {
+        $el
+          .addClass("zujin-option-active")
+          .siblings()
+          .removeClass("zujin-option-active");
         if (mId === "all") {
-          this.zujin = $el
-            .siblings()
-            .eq(0)
-            .attr("mId");
-          $('.tab[tab="weizhi"]')
-            .children(".tab-text").html("")
-            ;
+          this.zujin = "";
+          $('.tab[tab="zujin"]')
+            .children(".tab-text")
+            .html("租金");
         } else {
           this.zujin = mId;
+          let zujin = $el.html();
+          $('.tab[tab="zujin"]')
+            .addClass("tab-text-active")
+            .children(".tab-text")
+            .html(zujin);
         }
       }
       //户型（c、h）
@@ -389,10 +418,31 @@ export default {
           .siblings("ul")
           .children(".weizhi-item-left-active")
           .attr("cId");
+
         if (hId === "all") {
-          this.huxing = "";
+          this.huxingh = "";
+          $('.tab[tab="huxing"]')
+            .addClass("tab-text-active")
+            .children(".tab-text")
+            .html(
+              $el
+                .parent("ul")
+                .siblings("ul")
+                .children(".weizhi-item-left-active")
+                .html()
+            );
         } else {
           this.huxingh = hId;
+          let hx =
+            $el
+              .parent("ul")
+              .siblings("ul")
+              .children(".weizhi-item-left-active")
+              .html() + $el.html();
+          $('.tab[tab="huxing"]')
+            .addClass("tab-text-active")
+            .children(".tab-text")
+            .html(hx);
         }
       }
       //url请求时候的params
@@ -400,17 +450,14 @@ export default {
         this.ditie + this.zujin + this.huxingC + this.huxingh + this.gengduo;
 
       $(".tab-out").css({
-          "z-index": "",
-          top: ".88rem"
-        });
-        $('.tab-op').attr("isOpen", 0);
-        $('#mask').css('display' , 'none');
-        $('.tab-op').css("display", "none");
-        $(`.tab`).removeClass(
-          "tab-active"
-      );
-      console.log(this.filterSum)
-      
+        "z-index": "",
+        top: ".88rem"
+      });
+      $(".tab-op").attr("isOpen", 0);
+      $("#mask").css("display", "none");
+      $(".tab-op").css("display", "none");
+      $(`.tab`).removeClass("tab-active");
+
       this.$router.push({ path: "/zhaofang/" + this.filterSum });
       this.filterInUrl = this.filterSum;
     },
@@ -459,7 +506,6 @@ export default {
         });
 
         $option.attr("isOpen", 1);
-        console.log($option.siblings().attr("isOpen"), $option.attr("isOpen"));
         this.$parent.$refs.mask.style.display = "block";
         $(`.tab[tab=${e.currentTarget.getAttribute("tab")}]`)
           .addClass("tab-active")
@@ -483,7 +529,6 @@ export default {
         $(`.tab[tab=${e.currentTarget.getAttribute("tab")}]`).removeClass(
           "tab-active"
         );
-        console.log($option.siblings().attr("isOpen"), $option.attr("isOpen"));
       }
     },
     weizhiSelectChild(e, nm) {
@@ -523,6 +568,14 @@ export default {
         .css("display", "flex")
         .siblings(".weizhi-options")
         .css("display", "none");
+    },
+
+    backTop() {
+      this.backToTop();
+    },
+
+    showTopBar(attr) {
+      this.showBar = attr;
     }
   },
 
@@ -539,6 +592,18 @@ export default {
       bounce: false,
       probeType: 2
     });
+    this.bScroll.on("scroll", async () => {
+      let { y, maxScrollY } = this.bScroll;
+      if (Math.abs(y) >= 250 ) {
+        this.showTopBar("display:block");
+      }
+      if (Math.abs(y) < 250) {
+        this.showTopBar("display:none");
+      }
+    });
+    this.backToTop = function() {
+      this.bScroll.scrollTo(0, 0, 500);
+    };
     this.bScroll.on("scrollEnd", async () => {
       let { y, maxScrollY } = this.bScroll;
 
@@ -550,10 +615,9 @@ export default {
       }
     });
 
-    this.filterInUrl = this.$parent.filterP;
-    if (this.filterInUrl === "c1" || this.filterInUrl === "c2") {
+    if (this.$parent.filterP === "c1" || this.$parent.filterP === "c2") {
       $(".tab[tab=huxing]").addClass("tab-text-active");
-      if (this.filterInUrl === "c1") {
+      if (this.$parent.filterP === "c1") {
         $(".tab[tab=huxing]")
           .children(".tab-text")
           .html("合租");
@@ -610,7 +674,6 @@ export default {
   watch: {
     async $route(to, from) {
       // 当前路由
-      console.log(this.filterSum, this.filterInUrl);
     },
     async currentCity(val) {
       let a = globalCityList[val].cityEn;
@@ -642,6 +705,29 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.sort {
+  z-index: 100;
+  width: 0.9rem;
+  height: 0.9rem;
+  background-image: url('../../assets/img/sort.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  font-size: 0.2rem;
+  color: #fff;
+  position: fixed;
+  bottom: 2.56rem;
+  right: 0.3rem;
+
+  p {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50%;
+    text-align: center;
+  }
+}
+
 .find-house {
   -min-height: 110vh;
   height: 100%;
