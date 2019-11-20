@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Index from '@/views/home/Layout.vue'
 import Find from '@/views/zhaofang/Layout.vue'
+import Detail from '@/views/detail/Detail.vue'
 
 const routerPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
@@ -24,6 +25,11 @@ const routes = [{
     name: 'find',
     component: Find
   },
+  {
+    path: '/house',
+    name: 'detail',
+    component: Detail
+  }
 
 ]
 

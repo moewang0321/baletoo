@@ -13,8 +13,13 @@ import { mapState, mapActions } from "vuex";
 
 export default {
   beforeMount() {
-    console.log(this.$route.params.id);
-    this.filterP = this.$route.params.id;
+    if (this.$route.params.id) {
+      this.filterP = this.$route.params.id;
+    } else {
+      this.filterP = "";
+    }
+    console.log(this.filterP)
+    
   },
 
   components: {

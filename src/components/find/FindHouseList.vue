@@ -112,7 +112,7 @@
         </svg>
       </span>
     </div>
-    <p  class="vux-divider" style="padding-bottom: 0.8rem;">我是有底线的</p>
+    <p class="vux-divider" style="padding-bottom: 0.8rem;">我是有底线的</p>
   </div>
 </template>
 
@@ -123,6 +123,7 @@ import Skeleton from "@/components/skeleton/Skeleton";
 import { mapState, mapActions } from "vuex";
 import { get } from "@/utils/http.js";
 let city = localStorage.getItem("city") || "北京";
+
 let cityEn = globalCityList[city].cityEn;
 
 export default {
@@ -140,7 +141,7 @@ export default {
 
   data() {
     return {
-      filterString: this.$parent.filterInUrl,
+      filterString: this.$parent.filterInUrl || "",
       houseList: [],
       isShowSk: 0,
       isFirstIn: true
@@ -159,12 +160,18 @@ export default {
   },
 
   async mounted() {
+    cityEn = globalCityList[this.currentCity].cityEn;
     if (!this.filterString) {
-      this.filterString = this.$route.params.id + "/" || "";
+      if (this.$route.params.id) {
+        this.filterString = this.$route.params.id + "/" || "";
+      } else {
+        this.filterString = "";
+      }
     }
     if (!this.area) {
       this.area = "";
     }
+
     if (this.isFirstIn) {
       let result = await get({
         url:

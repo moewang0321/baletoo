@@ -190,10 +190,13 @@
             <div class="content-new">
               <ul>
                 <li
+                  class="gengduo-item"
                   v-for="(item , index) in specialTSList"
                   :key="index"
                   :index="index"
-                  :tId="'t' + item.id"
+                  :tId="item.id"
+                  @click="selectGengduo($event)"
+                  :isSelect="false"
                 >{{item.name}}</li>
               </ul>
             </div>
@@ -201,17 +204,20 @@
             <div class="content-new">
               <ul>
                 <li
+                  class="gengduo-item"
                   v-for="(item , index) in specialBZList"
                   :key="index"
                   :index="index"
-                  :tId="'t' + item.id"
+                  :tId="item.id"
+                  @click="selectGengduo($event)"
+                  :isSelect="false"
                 >{{item.name}}</li>
               </ul>
             </div>
             <div>
               <div class="btns-new">
-                <div class="btn-new btn-new-clean">清空</div>
-                <div class="btn-new btn-new-confirm">确认</div>
+                <div class="btn-new btn-new-clean" @click="resetGengduo($event)">清空</div>
+                <div class="btn-new btn-new-confirm" @click="submitGengduo($event)">确认</div>
               </div>
             </div>
           </div>
@@ -220,25 +226,31 @@
       </div>
     </div>
 
-    <div data-v-4cd80081 class="shortcut-filter">
-      <div data-v-4cd80081 class="shortcut-wrapper">
-        <div data-v-4cd80081 class="shortcut">
-          <span data-v-4cd80081 class="renzheng-icon" style="display: none;"></span>租金月付
+    <div class="shortcut-filter">
+      <div class="shortcut-wrapper">
+        <div class="shortcut" tab="t1">
+          <span class="renzheng-icon" style="display: none;"></span>租金月付
         </div>
-        <div data-v-4cd80081 class="shortcut">
-          <span data-v-4cd80081 class="renzheng-icon" style="display: none;"></span>近地铁
+        <div class="shortcut" tab="t5">
+          <span class="renzheng-icon" style="display: none;"></span>近地铁
         </div>
-        <div data-v-4cd80081 class="shortcut">
-          <span data-v-4cd80081 class="renzheng-icon" style="display: none;"></span>独卫
+        <div v-show="huxingC !== 'c1'" class="shortcut" tab="t2">
+          <span class="renzheng-icon" style="display: none;"></span>独卫
         </div>
-        <div data-v-4cd80081 class="shortcut">
-          <span data-v-4cd80081 class="renzheng-icon" style="display: none;"></span>朝南
+        <div v-show="huxingC" class="shortcut" tab="t21">
+          <span class="renzheng-icon" style></span>平台认证
         </div>
-        <div data-v-4cd80081 class="shortcut">
-          <span data-v-4cd80081 class="renzheng-icon" style="display: none;"></span>带阳台
+        <div v-show="huxingC === 'c1'" class="shortcut" tab="t18">
+          <span class="renzheng-icon" style="display: none;"></span>全网底价
         </div>
-        <div data-v-4cd80081 class="shortcut">
-          <span data-v-4cd80081 class="renzheng-icon" style="display: none;"></span>独立厨房
+        <div v-show="!huxingC" class="shortcut" tab="t3">
+          <span class="renzheng-icon" style="display: none;"></span>朝南
+        </div>
+        <div v-show="huxingC !== 'c1'" class="shortcut" tab="t9">
+          <span class="renzheng-icon" style="display: none;"></span>带阳台
+        </div>
+        <div v-show="!huxingC" class="shortcut" tab="t11">
+          <span class="renzheng-icon" style="display: none;"></span>独立厨房
         </div>
       </div>
     </div>
@@ -251,8 +263,31 @@
       ></FindHouseList>
     </div>
 
-    <div class="sort">
+    <div class="sort" v-on:click="show = !show">
       <p>排序</p>
+    </div>
+
+    <div class="v-transfer-dom">
+      <transition name="vux-popup-animate-bottom">
+        <div
+          v-show="show"
+          class="vux-popup-dialog vux-popup-bottom"
+          style="height: 5.42rem; z-index: 1000;"
+        >
+          <div class="sortList">
+            <ul class="options-weizhi options-weizhi-right">
+              <li class="options-weizhi-item weizhi-item-right right-active">默认排序</li>
+              <li
+                class="options-weizhi-item weizhi-item-right clearfix"
+                v-for="(sort , index) in paixulist"
+                :key="index"
+                :sId="'s' + sort.id"
+                @click="chooseSortItem($event)"
+              >{{sort.name}}</li>
+            </ul>
+          </div>
+        </div>
+      </transition>
     </div>
     <div class="topBack" ref="topBar" :style="showBar" @click="backTop">
       <p>回到顶部</p>
@@ -280,6 +315,8 @@ export default {
 
   data() {
     return {
+      show: false,
+
       showBar: "display:none",
       filterInUrl: "",
       houseList: [],
@@ -306,7 +343,9 @@ export default {
           ? "c2"
           : "",
       huxingh: "",
-      gengduo: "",
+      gengduo: [],
+      gengduoStr: "",
+      sortStr: "",
       filterSum: ""
     };
   },
@@ -336,6 +375,7 @@ export default {
     onCityOptionShow() {
       this.cityShow("showSelect");
     },
+    //筛选 点击不限时
     selectAll(e) {
       $(e.currentTarget)
         .addClass(" weizhi-item-left-active")
@@ -343,6 +383,7 @@ export default {
         .removeClass(" weizhi-item-left-active");
       this.tArealist = this.tHuXinglist = this.tLinelist = [];
     },
+    //点击地区 租金 户型时
     chooseItem(e) {
       //分析url中的筛选
 
@@ -400,6 +441,7 @@ export default {
         if (mId === "all") {
           this.zujin = "";
           $('.tab[tab="zujin"]')
+            .removeClass("tab-text-active")
             .children(".tab-text")
             .html("租金");
         } else {
@@ -447,7 +489,12 @@ export default {
       }
       //url请求时候的params
       this.filterSum =
-        this.ditie + this.zujin + this.huxingC + this.huxingh + this.gengduo;
+        this.ditie +
+        this.zujin +
+        this.huxingC +
+        this.huxingh +
+        this.sortStr +
+        this.gengduoStr;
 
       $(".tab-out").css({
         "z-index": "",
@@ -461,6 +508,24 @@ export default {
       this.$router.push({ path: "/zhaofang/" + this.filterSum });
       this.filterInUrl = this.filterSum;
     },
+    //排序
+    chooseSortItem(e) {
+      let id = $(e.currentTarget).attr("sId");
+      this.sortStr = id;
+      this.filterSum =
+        this.ditie +
+        this.zujin +
+        this.huxingC +
+        this.huxingh +
+        this.sortStr +
+        this.gengduoStr;
+
+      this.show = false;
+
+      this.$router.push({ path: "/zhaofang/" + this.filterSum });
+      this.filterInUrl = this.filterSum;
+    },
+    //选择 区域
     selectArea(e) {
       let en = e.currentTarget.getAttribute("en");
       let index = e.currentTarget.getAttribute("index");
@@ -472,6 +537,7 @@ export default {
 
       this.filltArealist(index, en);
     },
+    // 选择 地铁
     selectLine(e) {
       let index = e.currentTarget.getAttribute("index");
 
@@ -482,6 +548,7 @@ export default {
 
       this.filltLinelist(index);
     },
+    // 选择 户型
     selectHuxing(e) {
       let index = e.currentTarget.getAttribute("index");
 
@@ -492,7 +559,7 @@ export default {
 
       this.filltHuxing(index);
     },
-
+    //显示 隐藏 筛选菜单
     showOptionTab(e) {
       let tab = ".tab-" + e.currentTarget.getAttribute("tab");
       let $option = $(tab);
@@ -531,6 +598,7 @@ export default {
         );
       }
     },
+    // 地区下边二级选择
     weizhiSelectChild(e, nm) {
       $(`.weizhi-options`)
         .eq(0)
@@ -570,6 +638,66 @@ export default {
         .css("display", "none");
     },
 
+    //更多 多选
+    selectGengduo(e) {
+      let id = $(e.currentTarget).attr("tId");
+      if (!$(e.currentTarget).attr("isSelect")) {
+        this.gengduo.push(id);
+        $(e.currentTarget)
+          .attr("isSelect", true)
+          .addClass("active");
+      } else {
+        this.gengduo.splice(this.gengduo.findIndex(item => item === id), 1);
+        $(e.currentTarget)
+          .attr("isSelect", false)
+          .removeClass("active");
+        $(".tab[tab=gengduo]").removeClass("tab-text-active");
+      }
+
+      this.gengduoStr = "t" + this.gengduo.join(",");
+    },
+    //更多 清空
+    resetGengduo(e) {
+      this.gengduo = [];
+      this.gengduoStr = "";
+      $(".gengduo-item")
+        .removeClass("active")
+        .attr("isSelect", false);
+      $(".shortcut").removeClass("shortcut-active");
+      $('.tab[tab="gengduo"]')
+            .removeClass("tab-text-active")
+    },
+    //更多 确定
+    submitGengduo(e) {
+      if (this.gengduo.length) {
+        $(".tab[tab=gengduo]").addClass("tab-text-active");
+      }
+      for (let i = 0; i < this.gengduo.length; i++) {
+        if ($(`.shortcut[tab=${"t" + this.gengduo[i]}]`)) {
+          $(`.shortcut[tab=${"t" + this.gengduo[i]}]`).addClass('shortcut-active')
+        }
+      }
+      this.filterSum =
+        this.ditie +
+        this.zujin +
+        this.huxingC +
+        this.huxingh +
+        this.sortStr +
+        this.gengduoStr;
+
+      $(".tab-out").css({
+        "z-index": "",
+        top: ".88rem"
+      });
+      $(".tab-op").attr("isOpen", 0);
+      $("#mask").css("display", "none");
+      $(".tab-op").css("display", "none");
+      $(`.tab`).removeClass("tab-active");
+
+      this.$router.push({ path: "/zhaofang/" + this.filterSum });
+      this.filterInUrl = this.filterSum;
+    },
+
     backTop() {
       this.backToTop();
     },
@@ -594,7 +722,7 @@ export default {
     });
     this.bScroll.on("scroll", async () => {
       let { y, maxScrollY } = this.bScroll;
-      if (Math.abs(y) >= 250 ) {
+      if (Math.abs(y) >= 250) {
         this.showTopBar("display:block");
       }
       if (Math.abs(y) < 250) {
@@ -705,6 +833,16 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.sortList {
+  z-index: 2000;
+  width: 100%;
+
+  .options-weizhi {
+    width: 100%;
+    text-align: center;
+  }
+}
+
 .sort {
   z-index: 100;
   width: 0.9rem;
@@ -1251,6 +1389,14 @@ li.right-active {
         vertical-align: middle;
         margin-right: 0.12rem;
       }
+    }
+
+    .shortcut-active {
+        background-color: #fc6d79;
+        color: #fff;
+        .renzheng-icon {
+            background-image: url('../../assets/img/renzheng-active.png');
+        }
     }
   }
 }

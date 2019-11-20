@@ -124,6 +124,22 @@
     background-image: url(./assets/img/line.png);
 }
 
+.vux-popup-dialog {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: #eee;
+    z-index: 501;
+
+    transition-property: -webkit-transform;
+    transition-property: transform;
+    transition-property: transform, -webkit-transform;
+    transition-duration: .3s;
+    max-height: 100%;
+    overflow-y: auto;
+}
+
 @keyframes opacity2 {
     from {
         opacity: 0;
@@ -132,4 +148,26 @@
     to {
         opacity: 1;
     }
+}
+
+@keyframes aaa {
+    from {
+        height: 5.42rem;
+        z-index: 1000;
+    }
+
+    to {
+        height: 1.5vh;
+        z-index: -1
+    }
+}
+
+.vux-popup-animate-bottom-enter-active,
+.vux-popup-animate-bottom-leave-active {
+    transition: aaa .5s;
+}
+
+.vux-popup-animate-bottom-enter,
+.vux-popup-animate-bottom-leave-to {
+    display: none
 }
