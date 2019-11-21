@@ -263,7 +263,7 @@
       ></FindHouseList>
     </div>
 
-    <div class="sort" v-on:click="show = !show">
+    <div class="sort" v-on:click="showSort">
       <p>排序</p>
     </div>
 
@@ -367,7 +367,20 @@ export default {
       "openFindPageAdd",
       "resetFindPageAdd"
     ]),
-
+    showSort() {
+      this.show = !this.show
+      $(".tab-out").css({
+          "z-index": "",
+          top: ".88rem"
+        });
+        $('.tab-op').attr("isOpen", 0);
+        $('.tab-op').siblings().attr("isOpen", 0);
+        this.$parent.$refs.mask.style.display = "none";
+        $('.tab-op').css("display", "none");
+        $(`.tab[tab=${e.currentTarget.getAttribute("tab")}]`).removeClass(
+          "tab-active"
+        );
+    },
     //页数增加，参数传给HomeLike用以请求新数据
     findPageAdd() {
       this.findListPageUpdate(this.findListPage);
@@ -510,6 +523,7 @@ export default {
     },
     //排序
     chooseSortItem(e) {
+      
       let id = $(e.currentTarget).attr("sId");
       this.sortStr = id;
       this.filterSum =
@@ -641,7 +655,7 @@ export default {
     //更多 多选
     selectGengduo(e) {
       let id = $(e.currentTarget).attr("tId");
-      if (!$(e.currentTarget).attr("isSelect")) {
+      if ($(e.currentTarget).attr("isSelect") == "false") {
         this.gengduo.push(id);
         $(e.currentTarget)
           .attr("isSelect", true)
@@ -653,8 +667,11 @@ export default {
           .removeClass("active");
         $(".tab[tab=gengduo]").removeClass("tab-text-active");
       }
-
-      this.gengduoStr = "t" + this.gengduo.join(",");
+      if (this.gengduo.length) {
+        this.gengduoStr = "t" + this.gengduo.join(",");
+      } else {
+        this.gengduoStr = "";
+      }
     },
     //更多 清空
     resetGengduo(e) {
@@ -664,8 +681,7 @@ export default {
         .removeClass("active")
         .attr("isSelect", false);
       $(".shortcut").removeClass("shortcut-active");
-      $('.tab[tab="gengduo"]')
-            .removeClass("tab-text-active")
+      $('.tab[tab="gengduo"]').removeClass("tab-text-active");
     },
     //更多 确定
     submitGengduo(e) {
@@ -674,7 +690,10 @@ export default {
       }
       for (let i = 0; i < this.gengduo.length; i++) {
         if ($(`.shortcut[tab=${"t" + this.gengduo[i]}]`)) {
-          $(`.shortcut[tab=${"t" + this.gengduo[i]}]`).addClass('shortcut-active')
+          $(`.shortcut`).removeClass("shortcut-active");
+          $(`.shortcut[tab=${"t" + this.gengduo[i]}]`).addClass(
+            "shortcut-active"
+          );
         }
       }
       this.filterSum =
@@ -707,14 +726,8 @@ export default {
     }
   },
 
-  watch: {
-    $route(to, from) {
-      this.$router.go(0);
-    }
-  },
-
   async mounted() {
-    this.$parent.$refs.mask.style.display = "none";
+    $("#mask").css("display", "none");
     this.bScroll = new BScroll(".findHouse-container", {
       click: true,
       bounce: false,
@@ -742,19 +755,64 @@ export default {
         this.bScroll.refresh();
       }
     });
-
-    if (this.$parent.filterP === "c1" || this.$parent.filterP === "c2") {
-      $(".tab[tab=huxing]").addClass("tab-text-active");
-      if (this.$parent.filterP === "c1") {
+    
+    switch (this.$parent.filterP) {
+      //合租
+      case "c1": {
         $(".tab[tab=huxing]")
           .children(".tab-text")
           .html("合租");
-      } else {
+        break;
+      }
+      //整租
+      case "c2": {
         $(".tab[tab=huxing]")
           .children(".tab-text")
           .html("整租");
+        break;
+      }
+      //租金月付
+      case "t1": {
+        $(".tab[tab=gengduo]").addClass("tab-text-active");
+        $(".shortcut[tab=t1]").addClass("active shortcut-active");
+        break;
+      }
+      //近地铁
+      case "t5": {
+        $(".tab[tab=gengduo]").addClass("tab-text-active");
+        $(".shortcut[tab=t5]").addClass("active shortcut-active");
+        break;
+      }
+      //1500以下
+      case "m1": {
+        
+        $(".tab[tab=zujin]").addClass("tab-text-active")
+          .children(".tab-text")
+          .html("1500元以下");
+        break;
+      }
+      // 2500左右
+      case "m1800,3000": {
+        $(".tab[tab=zujin]").addClass("tab-text-active")
+          .children(".tab-text")
+          .html("1800-3000");
+        break;
       }
     }
+    // if (this.$parent.filterP === "c1" || this.$parent.filterP === "c2") {
+    //   $(".tab[tab=huxing]").addClass("tab-text-active");
+    //   if (this.$parent.filterP === "c1") {
+    //     $(".tab[tab=huxing]")
+    //       .children(".tab-text")
+    //       .html("合租");
+    //   } else {
+    //     $(".tab[tab=huxing]")
+    //       .children(".tab-text")
+    //       .html("整租");
+    //   }
+    // }
+    // if(this.$parent.filterP == )
+
     let result = await get({
       url: "/api/" + cityEn + "/Menuapi/index"
     });
@@ -802,6 +860,9 @@ export default {
   watch: {
     async $route(to, from) {
       // 当前路由
+      this.$parent.$refs.mask.style.display = "fixed";
+      console.log(1);
+      console.log(this.$parent.$refs.mask.style.display);
     },
     async currentCity(val) {
       let a = globalCityList[val].cityEn;
@@ -1392,11 +1453,12 @@ li.right-active {
     }
 
     .shortcut-active {
-        background-color: #fc6d79;
-        color: #fff;
-        .renzheng-icon {
-            background-image: url('../../assets/img/renzheng-active.png');
-        }
+      background-color: #fc6d79;
+      color: #fff;
+
+      .renzheng-icon {
+        background-image: url('../../assets/img/renzheng-active.png');
+      }
     }
   }
 }

@@ -160,6 +160,8 @@ export default {
     });
 
     this.houseList = result.result;
+    console.log(this.houseList);
+
     this.openPageAdd();
   },
   watch: {
@@ -216,6 +218,4 @@ export default {
     font-weight: 700;
   }
 }
-
-
 </style>

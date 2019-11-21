@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Index from '@/views/home/Layout.vue'
 import Find from '@/views/zhaofang/Layout.vue'
+import Roommate from '@/views/roommates/Roommate.vue'
 import Detail from '@/views/detail/Detail.vue'
 
 const routerPush = VueRouter.prototype.push
@@ -15,6 +16,7 @@ const routes = [{
     name: 'home',
     component: Index
   },
+  //找房
   {
     path: '/zhaofang/:id',
     name: 'find',
@@ -22,14 +24,24 @@ const routes = [{
   },
   {
     path: '/zhaofang',
-    name: 'find',
-    component: Find
+    redirect: '/zhaofang/ '
   },
   {
     path: '/house',
     name: 'detail',
     component: Detail
+  },
+  {
+    path: '/roommate',
+    redirect: '/roommate/1'
+  },
+  {
+    path: '/roommate/:page',
+    name: 'roommate',
+    component: Roommate
   }
+
+
 
 ]
 

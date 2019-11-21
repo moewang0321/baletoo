@@ -18,8 +18,6 @@ export default {
     } else {
       this.filterP = "";
     }
-    console.log(this.filterP)
-    
   },
 
   components: {
@@ -46,9 +44,7 @@ export default {
       this.findListPageUpdate(this.findListPage);
     }
   },
-  mounted() {
-    $("#mask").on("click", function() {});
-  }
+  mounted() {}
 };
 </script>
 

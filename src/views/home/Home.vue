@@ -37,13 +37,13 @@
             <div class="type-name">合租</div>
           </a>
         </router-link>
-        <router-link to="/zhaofang/apartment" tag="li">
+        <router-link to="/apartment" tag="li">
           <a href="javascript:void(0)">
             <img src="//js.baletoo.cn/static/m/static/images/icon-gongyu.png" alt />
             <div class="type-name">品牌公寓</div>
           </a>
         </router-link>
-        <router-link to="/zhaofang/roommate" tag="li">
+        <router-link to="/roommate" tag="li">
           <a href="javascript:void(0)">
             <img src="//js.baletoo.cn/static/m/static/images/icon-shiyou.png" alt />
             <div class="type-name">找室友</div>

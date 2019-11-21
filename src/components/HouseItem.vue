@@ -32,6 +32,7 @@
       </div>
     </div>
     <div class="extra-info">
+      <div v-if="!house.lanName && !house.short_name"></div>
       <div class="landlord-info" v-if="house.lanName">
         <div class="owner" v-if="house.lanName">
           <div class="logo">
@@ -416,7 +417,7 @@ export default {
         .quanwangdijia {
           width: 1.12rem;
           height: 0.5rem;
-          background-image: url('//js.baletoo.cn/static/m/static/img/quanwangdijia.3a60ff6.png'); 
+          background-image: url('//js.baletoo.cn/static/m/static/img/quanwangdijia.3a60ff6.png');
         }
 
         .icon {

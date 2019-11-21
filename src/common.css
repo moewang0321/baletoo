@@ -12,6 +12,13 @@
     float: right
 }
 
+.clearfix:after,
+.clearfix:before {
+    content: "";
+    display: block;
+    clear: both;
+}
+
 #mask {
     width: 100%;
     height: 100%;
