@@ -13,7 +13,10 @@ export default new Vuex.Store({
     homePageIsAdd: false,
     findListPage: 1,
     findListPageIsAdd: false,
-    currentCity: '北京'
+    currentCity: '北京',
+
+    //房屋id
+    houseId: ''
   },
   mutations,
   actions,

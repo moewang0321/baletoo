@@ -1,5 +1,5 @@
 <template>
-  <div class="house-card">
+  <div class="house-card" :id="house.house_id" @click="handleClick($event)">
     <div class="base-info">
       <div class="main-photo">
         <img :src="house.house_main_image" alt />
@@ -80,6 +80,9 @@
 </template>
 
 <script>
+import $ from "jquery";
+import { mapState, mapActions } from "vuex";
+
 export default {
   props: {
     house: {
@@ -87,10 +90,23 @@ export default {
     },
     index: Number
   },
-  filters: {
-    fiTitle(value, index) {
-      let arr = value.split(" ");
-      return arr[index];
+  computed: {
+    ...mapState(["houseId"])
+  },
+  // filters: {
+  //   fiTitle(value, index) {
+  //     let arr = value.split(" ");
+  //     return arr[index];
+  //   }
+  // },
+
+  methods: {
+    ...mapActions(["fillHouseId"]),
+    handleClick(e) {
+      let house_id = $(e.currentTarget).attr("id");
+      this.fillHouseId(house_id);
+      
+      this.$router.push({ path:'/house/' + this.houseId })
     }
   }
 };

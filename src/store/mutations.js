@@ -36,5 +36,12 @@ export default {
         state.currentCity = cityName
 
         localStorage.setItem('city', state.currentCity)
+    },
+    // 更改房屋id
+    setHouseId(state, houseId) {
+        state.houseId = houseId
+        console.log(state.houseId)
+
+
     }
 }

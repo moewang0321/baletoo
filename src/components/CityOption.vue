@@ -2,7 +2,7 @@
  * @Author: MoeWang
  * @Date: 2019-11-13 20:41:18
  * @LastEditors: 
- * @LastEditTime: 2019-11-14 09:50:31
+ * @LastEditTime: 2019-11-23 19:47:40
  * @FilePath: \Vue-baletu\baletu\src\components\CityOption.vue
  -->
 <template>
@@ -26,20 +26,6 @@
       <div class="cityList">
         <h2>热门城市</h2>
         <ul>
-          <!-- <li>上海</li>
-          <li>北京</li>
-          <li>深圳</li>
-          <li>杭州</li>
-          <li>南京</li>
-          <li>苏州</li>
-          <li>广州</li>
-          <li>成都</li>
-          <li>大连</li>
-          <li>天津</li>
-          <li>重庆</li>
-          <li>武汉</li>
-          <li>西安</li>
-          <li>郑州</li>-->
           <li
             v-for="( city , index ) in globalCityList"
             :key="index"
@@ -54,6 +40,7 @@
 </template>
 
 <script>
+import $ from "jquery";
 import { mapState, mapActions } from "vuex";
 export default {
   data() {
@@ -76,6 +63,9 @@ export default {
       this.changeCity(currentCity);
       this.cityShow("hideSelect");
     }
+  },
+  mounted() {
+    $(".option-box").removeClass("hideSelect");
   }
 };
 </script>

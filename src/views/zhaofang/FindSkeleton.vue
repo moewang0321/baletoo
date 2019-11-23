@@ -759,14 +759,14 @@ export default {
     switch (this.$parent.filterP) {
       //合租
       case "c1": {
-        $(".tab[tab=huxing]")
+        $(".tab[tab=huxing]").addClass("tab-text-active")
           .children(".tab-text")
           .html("合租");
         break;
       }
       //整租
       case "c2": {
-        $(".tab[tab=huxing]")
+        $(".tab[tab=huxing]").addClass("tab-text-active")
           .children(".tab-text")
           .html("整租");
         break;

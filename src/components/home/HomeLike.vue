@@ -160,7 +160,6 @@ export default {
     });
 
     this.houseList = result.result;
-    console.log(this.houseList);
 
     this.openPageAdd();
   },

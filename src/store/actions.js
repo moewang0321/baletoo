@@ -52,5 +52,12 @@ export default {
         commit
     }, cityName) {
         commit('setCurrentCity', cityName)
+    },
+
+    //传房屋id
+    fillHouseId({
+        commit
+    }, houseId) {
+        commit('setHouseId', houseId)
     }
 }
