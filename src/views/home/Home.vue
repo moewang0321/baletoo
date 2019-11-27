@@ -17,10 +17,10 @@
         <img src="//js.baletoo.cn/static/m/static/images/my.png" alt />
       </a>
 
-      <div class="searchBox">
+      <router-link class="searchBox" to="/search" tag="div">
         <img src="//js.baletoo.cn/static/m/static/images/fangdajin.png" alt />
         <span>输入区域，小区搜索房源</span>
-      </div>
+      </router-link>
     </div>
 
     <div class="quick-search" ref="searchIpt">

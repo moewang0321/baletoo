@@ -40,8 +40,17 @@ export default {
     // 更改房屋id
     setHouseId(state, houseId) {
         state.houseId = houseId
-        console.log(state.houseId)
 
+    },
+
+    //更新keyword
+    setKeyword(state, keyword) {
+        state.keyword = keyword
+    },
+
+    setSearchList(state, list) {
+        state.searchList = list
+        console.log(state.searchList)
 
     }
 }

@@ -346,6 +346,7 @@ export default {
       gengduo: [],
       gengduoStr: "",
       sortStr: "",
+      kw: "kw",
       filterSum: ""
     };
   },
@@ -356,7 +357,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["cityOption", "currentCity"]),
+    ...mapState(["cityOption", "currentCity", "keyword"]),
     ...mapState(["findListPage", "findListPageIsAdd"])
   },
 
@@ -368,18 +369,20 @@ export default {
       "resetFindPageAdd"
     ]),
     showSort() {
-      this.show = !this.show
+      this.show = !this.show;
       $(".tab-out").css({
-          "z-index": "",
-          top: ".88rem"
-        });
-        $('.tab-op').attr("isOpen", 0);
-        $('.tab-op').siblings().attr("isOpen", 0);
-        this.$parent.$refs.mask.style.display = "none";
-        $('.tab-op').css("display", "none");
-        $(`.tab[tab=${e.currentTarget.getAttribute("tab")}]`).removeClass(
-          "tab-active"
-        );
+        "z-index": "",
+        top: ".88rem"
+      });
+      $(".tab-op").attr("isOpen", 0);
+      $(".tab-op")
+        .siblings()
+        .attr("isOpen", 0);
+      this.$parent.$refs.mask.style.display = "none";
+      $(".tab-op").css("display", "none");
+      $(`.tab[tab=${e.currentTarget.getAttribute("tab")}]`).removeClass(
+        "tab-active"
+      );
     },
     //页数增加，参数传给HomeLike用以请求新数据
     findPageAdd() {
@@ -507,7 +510,8 @@ export default {
         this.huxingC +
         this.huxingh +
         this.sortStr +
-        this.gengduoStr;
+        this.gengduoStr +
+        this.kw;
 
       $(".tab-out").css({
         "z-index": "",
@@ -523,7 +527,6 @@ export default {
     },
     //排序
     chooseSortItem(e) {
-      
       let id = $(e.currentTarget).attr("sId");
       this.sortStr = id;
       this.filterSum =
@@ -532,7 +535,8 @@ export default {
         this.huxingC +
         this.huxingh +
         this.sortStr +
-        this.gengduoStr;
+        this.gengduoStr +
+        this.kw;
 
       this.show = false;
 
@@ -702,7 +706,8 @@ export default {
         this.huxingC +
         this.huxingh +
         this.sortStr +
-        this.gengduoStr;
+        this.gengduoStr +
+        this.kw;
 
       $(".tab-out").css({
         "z-index": "",
@@ -755,18 +760,20 @@ export default {
         this.bScroll.refresh();
       }
     });
-    
+
     switch (this.$parent.filterP) {
       //合租
       case "c1": {
-        $(".tab[tab=huxing]").addClass("tab-text-active")
+        $(".tab[tab=huxing]")
+          .addClass("tab-text-active")
           .children(".tab-text")
           .html("合租");
         break;
       }
       //整租
       case "c2": {
-        $(".tab[tab=huxing]").addClass("tab-text-active")
+        $(".tab[tab=huxing]")
+          .addClass("tab-text-active")
           .children(".tab-text")
           .html("整租");
         break;
@@ -785,15 +792,16 @@ export default {
       }
       //1500以下
       case "m1": {
-        
-        $(".tab[tab=zujin]").addClass("tab-text-active")
+        $(".tab[tab=zujin]")
+          .addClass("tab-text-active")
           .children(".tab-text")
           .html("1500元以下");
         break;
       }
       // 2500左右
       case "m1800,3000": {
-        $(".tab[tab=zujin]").addClass("tab-text-active")
+        $(".tab[tab=zujin]")
+          .addClass("tab-text-active")
           .children(".tab-text")
           .html("1800-3000");
         break;

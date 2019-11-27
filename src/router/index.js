@@ -5,6 +5,7 @@ import Find from '@/views/zhaofang/Layout.vue'
 import Roommate from '@/views/roommates/Roommate.vue'
 import Apartment from '@/views/apartment/Apartment.vue'
 import HouseDetail from '@/views/detail/Detail.vue'
+import Search from '@/views/search/Search.vue'
 
 const routerPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
@@ -47,6 +48,11 @@ const routes = [{
     path: '/house/:id',
     name: 'houseDetail',
     component: HouseDetail
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: Search
   }
 
 

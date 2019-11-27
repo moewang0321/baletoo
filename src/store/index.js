@@ -16,7 +16,12 @@ export default new Vuex.Store({
     currentCity: '北京',
 
     //房屋id
-    houseId: ''
+    houseId: '',
+
+    //搜索关键字
+    keyword: '',
+    //搜索结果
+    searchList: []
   },
   mutations,
   actions,

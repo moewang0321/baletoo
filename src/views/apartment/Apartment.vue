@@ -7,68 +7,70 @@
  -->
 <template>
   <div class="apartment-container">
-    <div class="search-header">
-      <div class="search-header clearfix">
-        <router-link class="search-header-home fl" to="/" tag="div">
-          <img src="//js.baletoo.cn/static/m/static/images/home.png" alt />
-        </router-link>
-        <div class="search-header-my fr">
-          <img src="//js.baletoo.cn/static/m/static/images/my.png" alt />
-        </div>
-        <div class="tabCity headerCity">
-          <div class="topSelect" @click="onCityOptionShow">
-            <span class="city-select city-select-text">{{currentCity}}</span>
-            <span class="city-select city-select-bg"></span>
+    <div class="apartment-wrapper">
+      <div class="search-header">
+        <div class="search-header clearfix">
+          <router-link class="search-header-home fl" to="/" tag="div">
+            <img src="//js.baletoo.cn/static/m/static/images/home.png" alt />
+          </router-link>
+          <div class="search-header-my fr">
+            <img src="//js.baletoo.cn/static/m/static/images/my.png" alt />
           </div>
+          <div class="tabCity headerCity">
+            <div class="topSelect" @click="onCityOptionShow">
+              <span class="city-select city-select-text">{{currentCity}}</span>
+              <span class="city-select city-select-bg"></span>
+            </div>
 
-          <CityOption></CityOption>
-        </div>
-        <div class="search-header-input">
-          <img src="//js.baletoo.cn/static/m/static/images/fangdajin.png" alt />输入区域、小区搜索公寓
-        </div>
-        <div class="find-house-map"></div>
-      </div>
-    </div>
-
-    <div class="banner">
-      <swiper :options="swiperOption" ref="mySwiper">
-        <!-- slides -->
-        <swiper-slide v-for="item in bannerList" :key="item.banners_id">
-          <img :src="item.banners_image_url" alt />
-        </swiper-slide>
-
-        <div class="swiper-pagination" slot="pagination"></div>
-      </swiper>
-    </div>
-
-    <div
-      class="unitStore"
-      v-for="shop in shopList"
-      :key="shop.company_shop_id"
-      :cId="shop.company_shop_id"
-    >
-      <div class="unitStore-title">
-        <div class="store-logo">
-          <img :src="shop.logo_url" alt />
-        </div>
-        <div class="store-mes">
-          <h2>
-            {{shop.shop_name}}
-            <span></span>
-          </h2>
-          <p>{{shop.address}}</p>
-        </div>
-        <div class="store-link">进店</div>
-      </div>
-      <ul class="unitList" v-if="shop.house_list.length">
-        <li v-for="house in shop.house_list" :key="house.house_id" :hid="house.house_id">
-          <div class="unitList-img">
-            <img :src="house.house_main_image" alt />
+            <CityOption></CityOption>
           </div>
-          <h2>{{house.house_attr_val}}</h2>
-          <h3>￥{{house.month_rent}}</h3>
-        </li>
-      </ul>
+          <div class="search-header-input">
+            <img src="//js.baletoo.cn/static/m/static/images/fangdajin.png" alt />输入区域、小区搜索公寓
+          </div>
+          <div class="find-house-map"></div>
+        </div>
+      </div>
+
+      <div class="banner">
+        <swiper :options="swiperOption" ref="mySwiper">
+          <!-- slides -->
+          <swiper-slide v-for="item in bannerList" :key="item.banners_id">
+            <img :src="item.banners_image_url" alt />
+          </swiper-slide>
+
+          <div class="swiper-pagination" slot="pagination"></div>
+        </swiper>
+      </div>
+
+      <div
+        class="unitStore"
+        v-for="shop in shopList"
+        :key="shop.company_shop_id"
+        :cId="shop.company_shop_id"
+      >
+        <div class="unitStore-title">
+          <div class="store-logo">
+            <img :src="shop.logo_url" alt />
+          </div>
+          <div class="store-mes">
+            <h2>
+              {{shop.shop_name}}
+              <span></span>
+            </h2>
+            <p>{{shop.address}}</p>
+          </div>
+          <div class="store-link">进店</div>
+        </div>
+        <ul class="unitList" v-if="shop.house_list.length">
+          <li v-for="house in shop.house_list" :key="house.house_id" :hid="house.house_id">
+            <div class="unitList-img">
+              <img :src="house.house_main_image" alt />
+            </div>
+            <h2>{{house.house_attr_val}}</h2>
+            <h3>￥{{house.month_rent}}</h3>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -129,6 +131,7 @@ export default {
       });
 
       this.bannerList = result.result.banner_list;
+      this.shopList = result.result.good_shops;
     }
   },
   async beforeRouteEnter(to, from, next) {
@@ -169,7 +172,8 @@ export default {
 <style lang='stylus' scoped>
 .apartment-container {
   background-color: #f0f0f0;
-  min-height: 100%;
+  height: 100%;
+  overflow: scroll;
 }
 
 .search-header {
